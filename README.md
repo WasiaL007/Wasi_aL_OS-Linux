@@ -35,7 +35,7 @@ Run the Python-based terminal operating system.
 ```bash
 pkg update -y
 pkg install git python -y
-git clone https://github.com/WasiaL007/Wasi_aL_OS-Termux.git
+git clone https://github.com/WasiaL007/Wasi_aL_OS-Linux.git
 cd Wasi_aL_OS-Termux
 python run.py
 ```
