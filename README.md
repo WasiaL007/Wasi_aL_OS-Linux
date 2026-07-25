@@ -35,8 +35,8 @@ Run the Python-based terminal operating system.
 ```bash
 pkg update -y
 pkg install git python -y
-git clone https://github.com/WasiaL007/Wasi_aL_OS-Termux.git
-cd Wasi_aL_OS-Termux
+git clone https://github.com/WasiaL007/Wasi_aL_OS-Linux.git
+cd Wasi_aL_OS-Linux
 python run.py
 ```
 
@@ -47,8 +47,8 @@ Download WASI AL OS APK and open the Android Package Installer automatically.
 ```bash
 pkg update -y
 pkg install git -y
-git clone https://github.com/WasiaL007/Wasi_aL_OS-Termux.git
-cd Wasi_aL_OS-Termux
+git clone https://github.com/WasiaL007/Wasi_aL_OS-Linux.git
+cd Wasi_aL_OS-Linux
 bash install.sh
 ```
 
@@ -57,7 +57,7 @@ bash install.sh
 Already installed? Launch **WASI AL OS** instantly with one command:
 
 ```bash
-cd ~/Wasi_aL_OS-Termux && clear && python run.py
+cd ~/Wasi_aL_OS-Linux && clear && python run.py
 ```
 ## ⭐ Support
 
