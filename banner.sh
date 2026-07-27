@@ -1,4 +1,3 @@
-cat > ~/Wasi_aL_OS-Linux/banner.sh <<'EOF'
 #!/data/data/com.termux/files/usr/bin/bash
 
 RED='\033[1;31m'
@@ -182,8 +181,3 @@ while true; do
         *) printf '%bInvalid option.%b\n' "$RED" "$RESET"; sleep 1 ;;
     esac
 done
-EOF
-
-chmod +x ~/Wasi_aL_OS-Linux/banner.sh
-bash -n ~/Wasi_aL_OS-Linux/banner.sh &&
-bash ~/Wasi_aL_OS-Linux/banner.sh
