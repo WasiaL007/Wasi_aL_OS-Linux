@@ -1,4 +1,4 @@
-'🌐''🌐'#!/data/data/com.termux/files/usr/bin/bash
+#!/data/data/com.termux/files/usr/bin/bash
 
 RED='\033[1;31m'
 GREEN='\033[1;32m'
