@@ -1,3 +1,4 @@
+cat > ~/Wasi_aL_OS-Linux/banner.sh <<'EOF'
 #!/data/data/com.termux/files/usr/bin/bash
 
 RED='\033[1;31m'
@@ -13,11 +14,14 @@ FACE_IMAGE="$SCRIPT_DIR/assets/angry-face.png"
 
 COLS="$(stty size 2>/dev/null | awk '{print $2}')"
 [[ "$COLS" =~ ^[0-9]+$ ]] || COLS=100
+(( COLS > 100 )) && COLS=100
 (( COLS < 80 )) && COLS=80
 
 repeat_char() {
     local ch="$1" n="$2" i
-    for ((i=0; i<n; i++)); do printf '%s' "$ch"; done
+    for ((i=0; i<n; i++)); do
+        printf '%s' "$ch"
+    done
 }
 
 center_text() {
@@ -27,27 +31,23 @@ center_text() {
     printf '%*s%s\n' "$pad" '' "$text"
 }
 
-red_line() {
-    printf '%b' "$RED"
-    repeat_char '─' "$COLS"
-    printf '%b\n' "$RESET"
-}
-
 show_face() {
     if command -v chafa >/dev/null 2>&1 && [[ -f "$FACE_IMAGE" ]]; then
-        chafa --format=symbols --colors=full --symbols=block \
-              --size="${COLS}x20" "$FACE_IMAGE"
+        chafa \
+            --colors=full \
+            --symbols=block \
+            --size="${COLS}x20" \
+            "$FACE_IMAGE"
         printf '%b' "$RESET"
     else
         center_text "Angry Bird image not found: $FACE_IMAGE"
     fi
 }
 
-
 show_title() {
     printf '%b' "$RED"
 
-    if (( WIDTH >= 92 )); then
+    if (( COLS >= 92 )); then
         local lines=(
 ' __        __    _    ____  ___      _    _       __  __ _____ _   _ _____ ____  ___'
 ' \ \      / /   / \  / ___||_ _|    / \  | |     |  \/  | ____| | | | ____|  _ \|_ _|'
@@ -55,20 +55,18 @@ show_title() {
 '   \ V  V /   / ___ \ ___) || |   / ___ \| |___  | |  | | |___|  _  | |___| |_| || |'
 '    \_/\_/   /_/   \_\____/|___| /_/   \_\_____| |_|  |_|_____|_| |_|_____|____/|___|'
         )
+
         local row
         for row in "${lines[@]}"; do
             center_text "$row"
         done
+    elif command -v figlet >/dev/null 2>&1; then
+        figlet -f small "WASI AL MEHEDI" 2>/dev/null |
+        while IFS= read -r row; do
+            center_text "$row"
+        done
     else
-        # Mobile-safe fallback keeps the title clear and centred.
-        if command -v figlet >/dev/null 2>&1; then
-            figlet -f small "WASI AL MEHEDI" 2>/dev/null |
-            while IFS= read -r row; do
-                center_text "$row"
-            done
-        else
-            center_text "WASI AL MEHEDI"
-        fi
+        center_text "WASI AL MEHEDI"
     fi
 
     printf '%b\n' "$RESET"
@@ -79,6 +77,7 @@ box_row() {
     local inner=$((COLS - 2))
     local pad=$((inner - ${#text}))
     (( pad < 0 )) && pad=0
+
     printf '%b│%b%s%*s%b│%b\n' \
         "$RED" "$color" "$text" "$pad" '' "$RED" "$RESET"
 }
@@ -91,9 +90,10 @@ show_info() {
     repeat_char '─' $((COLS - 2))
     printf '┐%b\n' "$RESET"
 
-    box_row "$GREEN"   '  SYSTEM      : ONLINE        | USER : WASI'
+    box_row "$GREEN"   '  SYSTEM      : ONLINE'
+    box_row "$GREEN"   '  USER        : WASI'
     box_row "$MAGENTA" '  OS          : WASI AL OS LINUX v1.7-dev'
-    box_row "$GREEN"   '  DEVELOPER   : Wasi aL Mehedi'
+    box_row "$BLUE"    '  DEVELOPER   : Wasi aL Mehedi'
     box_row "$YELLOW"  "  DATE        : $now"
 
     printf '%b└' "$RED"
@@ -101,48 +101,28 @@ show_info() {
     printf '┘%b\n' "$RESET"
 }
 
-menu_width() {
-    local width
-    width="$(stty size 2>/dev/null | awk '{print $2}')"
-    [[ "$width" =~ ^[0-9]+$ ]] || width=80
-    (( width > 100 )) && width=100
-    printf '%s' "$width"
-}
-
 menu_border() {
-    local width
-    width="$(menu_width)"
-
     printf '%b' "$RED"
-    printf '%*s' "$width" '' | tr ' ' '*'
+    repeat_char '◈' "$COLS"
     printf '%b\n' "$RESET"
 }
 
 menu_title() {
-    local width title left
-    width="$(menu_width)"
-    title='MAIN MENU - SELECT MODULE'
-    left=$(( (width - ${#title}) / 2 ))
-
-    printf '%b%*s%s%b\n' \
-        "$YELLOW" "$left" '' "$title" "$RESET"
+    printf '%b' "$YELLOW"
+    center_text 'MAIN MENU - SELECT MODULE'
+    printf '%b' "$RESET"
 }
 
 menu_line() {
     local icon="$1"
     local number="$2"
     local label="$3"
-    local width
-
-    width="$(menu_width)"
 
     printf '%b●%b' "$RED" "$RESET"
-
     printf '\033[4G%s' "$icon"
     printf '\033[9G%b[%02d]%b' "$RED" "$number" "$RESET"
     printf '\033[15G%b%s%b' "$WHITE" "$label" "$RESET"
-
-    printf '\033[%dG%b●%b\n' "$width" "$RED" "$RESET"
+    printf '\033[%dG%b●%b\n' "$COLS" "$RED" "$RESET"
 }
 
 show_menu() {
@@ -167,12 +147,13 @@ show_menu() {
     menu_border
 }
 
-
-
 module_message() {
-    printf '\n%b%s module is under development.%b\n' "$YELLOW" "$1" "$RESET"
+    printf '\n%b%s module is under development.%b\n' \
+        "$YELLOW" "$1" "$RESET"
     read -r -p 'Press Enter to return...'
 }
+
+trap 'printf "\n%b" "$RESET"; exit 130' INT TERM
 
 while true; do
     clear
@@ -201,3 +182,8 @@ while true; do
         *) printf '%bInvalid option.%b\n' "$RED" "$RESET"; sleep 1 ;;
     esac
 done
+EOF
+
+chmod +x ~/Wasi_aL_OS-Linux/banner.sh
+bash -n ~/Wasi_aL_OS-Linux/banner.sh &&
+bash ~/Wasi_aL_OS-Linux/banner.sh
