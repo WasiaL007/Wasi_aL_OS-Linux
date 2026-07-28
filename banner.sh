@@ -142,6 +142,8 @@ show_menu() {
     menu_line '💾' 11 'Save Report'
     menu_line '✏️' 12 'Change Banner'
     menu_line '🚪' 13 'Exit'
+    menu_line '↩️' 14 'Back to Prompt'
+    menu_line '🔄' 15 'Restart WASI AL OS'
 
     menu_border
 }
@@ -165,19 +167,21 @@ while true; do
     read -r option
 
     case "$option" in
-        1|01) module_message 'Network Scan' ;;
-        2|02) module_message 'Web Scanner' ;;
+        1|01) python "$HOME/Wasi_aL_OS-Linux/core/runner.py" modules/network.py ;;
+        2|02) python "$HOME/Wasi_aL_OS-Linux/core/runner.py" modules/web.py ;;
         3|03) module_message 'Vulnerability Scanner' ;;
-        4|04) module_message 'User Finder (OSINT)' ;;
+        4|04) python "$HOME/Wasi_aL_OS-Linux/core/runner.py" modules/osint.py ;;
         5|05) module_message 'Directory Bruteforcer' ;;
-        6|06) module_message 'Port Scanner' ;;
-        7|07) module_message 'DNS Scanner' ;;
+        6|06) python "$HOME/Wasi_aL_OS-Linux/core/runner.py" modules/port.py ;;
+        7|07) python "$HOME/Wasi_aL_OS-Linux/core/runner.py" modules/dns.py ;;
         8|08) module_message 'Subdomain Scanner' ;;
-        9|09) module_message 'Hash Tools' ;;
-        10) module_message 'Payload Generator' ;;
-        11) module_message 'Save Report' ;;
-        12) module_message 'Change Banner' ;;
+        9|09) python "$HOME/Wasi_aL_OS-Linux/core/runner.py" modules/hash.py ;;
+        10) python "$HOME/Wasi_aL_OS-Linux/core/runner.py" modules/payload.py ;;
+        11) python "$HOME/Wasi_aL_OS-Linux/core/runner.py" modules/reports.py ;;
+        12) python "$HOME/Wasi_aL_OS-Linux/core/runner.py" modules/themes.py ;;
         13) clear; exit 0 ;;
+        14) break ;;
+        15) exec "$0" ;;
         *) printf '%bInvalid option.%b\n' "$RED" "$RESET"; sleep 1 ;;
     esac
 done

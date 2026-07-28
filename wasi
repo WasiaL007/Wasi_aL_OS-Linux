@@ -1,0 +1,61 @@
+#!/data/data/com.termux/files/usr/bin/bash
+
+ROOT="$HOME/Wasi_aL_OS-Linux"
+
+case "$1" in
+    "")
+        bash "$ROOT/banner.sh"
+        ;;
+    scan|network)
+        shift
+        python "$ROOT/modules/network.py" "$@"
+        ;;
+    web)
+        shift
+        python "$ROOT/modules/web.py" "$@"
+        ;;
+    dns)
+        shift
+        python "$ROOT/modules/dns.py" "$@"
+        ;;
+    port)
+        shift
+        python "$ROOT/modules/port.py" "$@"
+        ;;
+    hash)
+        shift
+        python "$ROOT/modules/hash.py" "$@"
+        ;;
+    payload)
+        shift
+        python "$ROOT/modules/payload.py" "$@"
+        ;;
+    osint)
+        shift
+        python "$ROOT/modules/osint.py" "$@"
+        ;;
+    report)
+        python "$ROOT/modules/reports.py"
+        ;;
+    system)
+        python "$ROOT/modules/system.py"
+        ;;
+    help|-h|--help)
+        printf '%s\n' \
+        "wasi" \
+        "wasi scan [network]" \
+        "wasi web [url]" \
+        "wasi dns [domain]" \
+        "wasi port [host]" \
+        "wasi hash [text]" \
+        "wasi payload [text]" \
+        "wasi osint" \
+        "wasi report" \
+        "wasi system"
+        ;;
+    *)
+        echo "Unknown command: $1"
+        echo "Run: wasi help"
+        exit 1
+        ;;
+esac
