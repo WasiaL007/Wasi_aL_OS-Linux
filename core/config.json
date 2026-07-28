@@ -1,0 +1,7 @@
+{
+    "theme": "default",
+    "timeout": 5,
+    "threads": 50,
+    "reports": true,
+    "version": "1.7"
+}
