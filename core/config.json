@@ -1,5 +1,5 @@
 {
-    "theme": "default",
+    "theme": "blue",
     "timeout": 5,
     "threads": 50,
     "reports": true,
