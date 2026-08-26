@@ -1,113 +1,62 @@
+#!/usr/bin/env python3
+
 import os
 import sys
-from datetime import datetime
-from time import sleep
+import subprocess
+from pathlib import Path
+
+VERSION = "1.7"
+BASE_DIR = Path(__file__).resolve().parent
+BANNER = BASE_DIR / "banner.sh"
 
 GREEN = "\033[1;32m"
 CYAN = "\033[1;36m"
 YELLOW = "\033[1;33m"
+RED = "\033[1;31m"
 RESET = "\033[0m"
 
-print(f"{GREEN} _      _____   ________  ___   __")
-print(f"| | /| / / _ | / __/  _/ / _ | / /")
-print(f"{CYAN}| |/ |/ / __ |_\\ \\_/ /  / __ |/ /__")
-print(f"{GREEN}|__/|__/_/ |_/___/___/ /_/ |_/____/{RESET}")
-print(f"\n{YELLOW}==================================================={RESET}")
-print(f"{CYAN}          WASI AL OS v1.6 | Developer: Wasi aL      {RESET}")
-print(f"{YELLOW}==================================================={RESET}\n")
 
+def main():
+    os.chdir(BASE_DIR)
 
-print("\nStarting Wasi-Al-OS...")
-for i in range(3):
-    print("Loading" + "." * (i + 1))
-    sleep(0.5)
+    print(f"{CYAN}")
+    print("============================================================")
+    print("                 WASI AL OS LINUX v1.7")
+    print("                  Developer: Wasi aL")
+    print("============================================================")
+    print(f"{RESET}")
 
-password = "1234"
+    if not BANNER.is_file():
+        print(f"{RED}[ERROR] banner.sh was not found.{RESET}")
+        print(f"Expected: {BANNER}")
+        sys.exit(1)
 
-user_pass = input("Enter Password: ")
-
-if user_pass != password:
-    print("Wrong Password!")
-    sys.exit()
-
-print("Access Granted!")
-
-name = input("\nEnter your name: ")
-print(f"\nWelcome {name}!")
-
-while True:
-    print("\n========== MENU ==========")
-    print("1. About System")
-    print("2. Developer Info")
-    print("3. Date & Time")
-    print("4. Calculator")
-    print("5. Notes")
-    print("6. Exit")
-
-    choice = input("\nChoose option: ")
-
-    if choice == "1":
-        print("\nWASI AL OS v1.6")
-        print("A Python-based mini operating system.")
-
-    elif choice == "2":
-        print("\nDeveloper: Wasi Al")  
-        print("GitHub: https://github.com/WasiaL007")
-
-    elif choice == "3":
-        print("\nCurrent Date & Time:")
-        print(datetime.now())
-
-    elif choice == "4":
+    if not os.access(BANNER, os.X_OK):
         try:
-            a = float(input("First number: "))
-            op = input("Operator (+ - * /): ")
-            b = float(input("Second number: "))
+            BANNER.chmod(BANNER.stat().st_mode | 0o111)
+        except OSError as exc:
+            print(f"{RED}[ERROR] Cannot make banner.sh executable.{RESET}")
+            print(exc)
+            sys.exit(1)
 
-            if op == "+":
-                print("Result =", a + b)
-            elif op == "-":
-                print("Result =", a - b)
-            elif op == "*":
-                print("Result =", a * b)
-            elif op == "/":
-                if b == 0:
-                    print("Cannot divide by zero!")
-                else:
-                    print("Result =", a / b)
-            else:
-                print("Invalid operator!")
+    print(f"{GREEN}[✓] Starting WASI AL OS Linux v1.7...{RESET}\n")
 
-        except ValueError:
-            print("Invalid input! Please enter numbers only.")
+    try:
+        result = subprocess.run(
+            ["bash", str(BANNER)],
+            cwd=BASE_DIR,
+        )
+        sys.exit(result.returncode)
 
-    elif choice == "5":
-        print("\n===== NOTES =====")
-        print("1. Write Note")
-        print("2. View Notes")
+    except KeyboardInterrupt:
+        print(f"\n{YELLOW}WASI AL OS stopped.{RESET}")
+        sys.exit(130)
 
-        note_choice = input("Choose option: ")
+    except Exception as exc:
+        print(f"{RED}[ERROR] Failed to start WASI AL OS.{RESET}")
+        print(exc)
+        sys.exit(1)
 
-        if note_choice == "1":
-            note = input("Write a note: ")
-            with open("notes.txt", "a") as f:
-                f.write(note + "\n")
-            print("Note saved successfully!")
 
-        elif note_choice == "2":
-            print("\n===== SAVED NOTES =====")
-            try:
-                with open("notes.txt", "r") as f:
-                    print(f.read())
-            except:
-                print("No notes found!")
-
-        else:
-            print("Invalid option!")
-
-    elif choice == "6":
-        print("\nShutting down Wasi-Al-OS...")
-        break
-
-    else:
-        print("Invalid option!")
+if __name__ == "__main__":
+    main()
