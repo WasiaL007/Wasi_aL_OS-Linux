@@ -215,7 +215,7 @@ while true; do
         10) safe_module "modules/payload.py" ;;
         11) safe_module "modules/reports.py" ;;
         12) safe_module "modules/themes.py" ;;
-        13) clear; exit 0 ;;
+        13) exit 0 ;;
         14) clear; exit 0 ;;
         15) bash ~/dmz-menu.sh ;;
         *) printf '%bInvalid option.%b\n' "$RED" "$RESET"; sleep 1 ;;
