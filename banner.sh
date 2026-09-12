@@ -91,7 +91,7 @@ show_info() {
 
     box_row "$GREEN"   '  SYSTEM      : ONLINE'
     box_row "$GREEN"   '  USER        : WASI'
-    box_row "$MAGENTA" '  OS          : WASI AL OS LINUX v1.7'
+    box_row "$MAGENTA" '  OS          : WASI AL OS LINUX v1.7-dev'
     box_row "$BLUE"    '  DEVELOPER   : Wasi aL Mehedi'
     box_row "$YELLOW"  "  DATE        : $now"
 
@@ -141,53 +141,18 @@ show_menu() {
     menu_line '🚀' 10 'Payload Generator'
     menu_line '💾' 11 'Save Report'
     menu_line '✏️' 12 'Change Banner'
-    menu_line '🚪' 13 'Exit'
-    menu_line '↩️' 14 'Back to Prompt'
+    menu_line '↩️' 13 'Back to Prompt'
+    menu_line '🔄' 14 'Restart WASI AL OS'
     menu_line '🔄' 15 'Switch to Submenu'
+    menu_line '🚪' 0  'Exit'
 
     menu_border
 }
 
-safe_module() {
-    local module="$1"
-    local runner="$HOME/Wasi_aL_OS-Linux/core/runner.py"
-    local module_path="$HOME/Wasi_aL_OS-Linux/$module"
-
-    if [[ ! -f "$runner" ]]; then
-        printf '\n%b[NOTICE] Core runner is not installed yet.%b\n' \
-            "$YELLOW" "$RESET"
-        printf '%bExpected:%b %s\n' "$CYAN" "$RESET" "$runner"
-        read -r -p 'Press Enter to return...'
-        return
-    fi
-
-    if [[ ! -f "$module_path" ]]; then
-        printf '\n%b[NOTICE] Module is not installed yet.%b\n' \
-            "$YELLOW" "$RESET"
-        printf '%bExpected:%b %s\n' "$CYAN" "$RESET" "$module_path"
-        read -r -p 'Press Enter to return...'
-        return
-    fi
-
-    python "$runner" "$module_path"
-
-    local status=$?
-
-    if [[ $status -ne 0 ]]; then
-        printf '\n%b[NOTICE] Module exited with status %s.%b\n' \
-            "$YELLOW" "$status" "$RESET"
-        read -r -p 'Press Enter to return...'
-    fi
-}
-
 module_message() {
-    clear
-    printf '\n%b============================================================%b\n' "$YELLOW" "$RESET"
-    printf '%b        %s%b\n' "$YELLOW" "$1" "$RESET"
-    printf '%b============================================================%b\n' "$YELLOW" "$RESET"
-    printf '\n%b[NOTICE] This module is currently under development.%b\n' "$YELLOW" "$RESET"
-    printf '%bReturning to WASI AL OS main menu...%b\n' "$CYAN" "$RESET"
-    sleep 2
+    printf '\n%b%s module is under development.%b\n' \
+        "$YELLOW" "$1" "$RESET"
+    read -r -p 'Press Enter to return...'
 }
 
 trap 'printf "\n%b" "$RESET"; exit 130' INT TERM
@@ -203,21 +168,22 @@ while true; do
     read -r option
 
     case "$option" in
-        1|01) safe_module "modules/network.py" ;;
-        2|02) safe_module "modules/web.py" ;;
+        1|01) python "$HOME/Wasi_aL_OS-Linux/core/runner.py" modules/network.py ;;
+        2|02) python "$HOME/Wasi_aL_OS-Linux/core/runner.py" modules/web.py ;;
         3|03) module_message 'Vulnerability Scanner' ;;
-        4|04) safe_module "modules/osint.py" ;;
+        4|04) python "$HOME/Wasi_aL_OS-Linux/core/runner.py" modules/osint.py ;;
         5|05) module_message 'Directory Bruteforcer' ;;
-        6|06) safe_module "modules/port.py" ;;
-        7|07) safe_module "modules/dns.py" ;;
+        6|06) python "$HOME/Wasi_aL_OS-Linux/core/runner.py" modules/port.py ;;
+        7|07) python "$HOME/Wasi_aL_OS-Linux/core/runner.py" modules/dns.py ;;
         8|08) module_message 'Subdomain Scanner' ;;
-        9|09) safe_module "modules/hash.py" ;;
-        10) safe_module "modules/payload.py" ;;
-        11) safe_module "modules/reports.py" ;;
-        12) safe_module "modules/themes.py" ;;
+        9|09) python "$HOME/Wasi_aL_OS-Linux/core/runner.py" modules/hash.py ;;
+        10) python "$HOME/Wasi_aL_OS-Linux/core/runner.py" modules/payload.py ;;
+        11) python "$HOME/Wasi_aL_OS-Linux/core/runner.py" modules/reports.py ;;
+        12) python "$HOME/Wasi_aL_OS-Linux/core/runner.py" modules/themes.py ;;
         13) exit 0 ;;
-        14) clear; exit 0 ;;
+        14) exec "$0" ;;
         15) bash ~/dmz-menu.sh ;;
+        0) clear; exit 0 ;;
         *) printf '%bInvalid option.%b\n' "$RED" "$RESET"; sleep 1 ;;
     esac
 done
