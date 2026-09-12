@@ -217,7 +217,7 @@ while true; do
         12) safe_module "modules/themes.py" ;;
         13) clear; exit 0 ;;
         14) clear; exit 0 ;;
-        15) exec "$0" ;;
+        15) bash ~/dmz-menu.sh ;;
         *) printf '%bInvalid option.%b\n' "$RED" "$RESET"; sleep 1 ;;
     esac
 done
