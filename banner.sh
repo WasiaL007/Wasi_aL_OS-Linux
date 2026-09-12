@@ -143,7 +143,7 @@ show_menu() {
     menu_line '✏️' 12 'Change Banner'
     menu_line '🚪' 13 'Exit'
     menu_line '↩️' 14 'Back to Prompt'
-    menu_line '🔄' 15 'Restart WASI AL OS'
+    menu_line '🔄' 15 'Switch to Submenu'
 
     menu_border
 }
