@@ -46,6 +46,7 @@ show_menu() {
     print_item "5" "DmZcoder ZIP CRACK"
     print_item "6" "DmZ-Phis-Tool"
     print_item "7" "Account Recovery"
+    print_item "8" "DmZcoder FB FISH"
     echo -e "\e[0m"
     echo ""
     echo -e "\e[1;36m"
@@ -53,7 +54,7 @@ show_menu() {
     echo -e "\e[0m"
     echo ""
     echo -e "\e[1;31m"
-    print_item "8" "Back to Main Window"
+    print_item "9" "Back to Main Window"
     print_item "0" "Exit"
     echo -e "\e[0m"
     echo ""
@@ -107,14 +108,17 @@ run_option() {
                 cd ~/Google-Account-Recovery && python main.py
             elif [ -d ~/DmZcoder-Account-Recovery ]; then
                 cd ~/DmZcoder-Account-Recovery && python main.py
-            elif [ -d ~/DmZcoder-WEB-CRACK ]; then
-                cd ~/DmZcoder-WEB-CRACK && python dmz_web_crack.py
             else
                 echo "❌ Account Recovery folder not found"
                 sleep 2
             fi
             ;;
         8)
+            echo "⏳ Starting DmZcoder FB FISH..."
+            sleep 1
+            cd ~/DmZcoder-FB-FISH && python dmz_fb.py
+            ;;
+        9)
             echo "🔙 Returning to Main Window..."
             sleep 1
             exec bash ~/Wasi_aL_OS-Linux/banner.sh
