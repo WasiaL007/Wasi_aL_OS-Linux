@@ -44,9 +44,8 @@ show_menu() {
     print_item "3" "DMZ CAM"
     print_item "4" "Cyber Player"
     print_item "5" "DmZcoder ZIP CRACK"
-    print_item "6" "DmZ-Phis-Tool"
-    print_item "7" "Account Recovery"
-    print_item "8" "DmZcoder FB FISH"
+    print_item "6" "Account Recovery"
+    print_item "7" "DmZcoder FB FISH"
     echo -e "\e[0m"
     echo ""
     echo -e "\e[1;36m"
@@ -54,8 +53,17 @@ show_menu() {
     echo -e "\e[0m"
     echo ""
     echo -e "\e[1;31m"
-    print_item "9" "Back to Main Window"
+    print_item "8" "Back to Main Window"
     print_item "0" "Exit"
+    echo -e "\e[0m"
+    echo ""
+    echo -e "\e[1;36m"
+    border
+    echo -e "\e[0m"
+    echo ""
+    echo -e "\e[1;31m"
+    center "⚠️  Educational Purpose / Research Only"
+    center "👤  Author: DmZcoder"
     echo -e "\e[0m"
     echo ""
     echo -e "\e[1;36m"
@@ -97,28 +105,16 @@ run_option() {
             cd ~/DmZcoder-ZIP-CRACK && python dmz_zip.py
             ;;
         6)
-            echo "⏳ Starting DmZ-Phis-Tool..."
-            sleep 1
-            cd ~/DmZ-Phis-Tool-clean && python dmzcoder.py
-            ;;
-        7)
             echo "⏳ Starting Account Recovery..."
             sleep 1
-            if [ -d ~/Google-Account-Recovery ]; then
-                cd ~/Google-Account-Recovery && python main.py
-            elif [ -d ~/DmZcoder-Account-Recovery ]; then
-                cd ~/DmZcoder-Account-Recovery && python main.py
-            else
-                echo "❌ Account Recovery folder not found"
-                sleep 2
-            fi
+            cd ~/DmZ-Phis-Tool-clean && python GFISH.py
             ;;
-        8)
+        7)
             echo "⏳ Starting DmZcoder FB FISH..."
             sleep 1
             cd ~/DmZcoder-FB-FISH && python dmz_fb.py
             ;;
-        9)
+        8)
             echo "🔙 Returning to Main Window..."
             sleep 1
             exec bash ~/Wasi_aL_OS-Linux/banner.sh
